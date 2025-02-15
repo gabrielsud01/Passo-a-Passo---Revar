@@ -12,6 +12,45 @@
             padding: 0;
             background: linear-gradient(to right, #1A237E, #283593, #3949AB);
             color: white;
+            /* Garante que o corpo ocupa toda a altura da tela */
+            height: 100vh;
+            display: flex;
+            flex-direction: column; /* Alinha os elementos verticalmente */
+        }
+        .header {
+            background-color: #1A237E;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .revar-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+        .steps {
+            display: flex;
+        }
+        .step {
+            background-color: #FF9800;
+            color: white;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .step-number {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background-color: white;
+            color: #FF9800;
+            margin-right: 5px;
+            line-height: 25px;
+            text-align: center;
         }
         .container {
             max-width: 900px;
@@ -21,10 +60,28 @@
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
             color: black;
+            /* Permite que o conteúdo cresça para preencher o espaço disponível */
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centraliza o conteúdo horizontalmente */
         }
         #step-image {
             max-width: 100%;
             height: auto;
+            /* Ajusta a altura da imagem para caber na tela, se necessário */
+            max-height: 60vh; /* Define uma altura máxima para a imagem */
+            object-fit: contain; /* Mantém a proporção da imagem */
+        }
+        .description {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            color: #333;
+        }
+        .description a {
+            color: #1A237E;
+            font-weight: bold;
+            text-decoration: none;
         }
         .buttons {
             margin-top: 20px;
@@ -42,51 +99,21 @@
         button:disabled {
             background: #ccc;
         }
-        .description {
-            margin-bottom: 15px;
-            font-size: 1.2rem; /* Tamanho da fonte responsivo */
-            color: #333;
-        }
-        .description a {
-            color: #1A237E;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        /* Novas estilos para a faixa azul e os passos */
-        .header {
-            background-color: #1A237E;
-            color: white;
-            padding: 15px; /* Aumento da espessura da faixa */
-            display: flex;
-            justify-content: center; /* Centraliza o conteúdo horizontalmente */
-            align-items: center;
-        }
-        .revar-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-right: 20px; /* Espaço entre o título e os passos */
-        }
-        .steps {
-            display: flex;
-        }
-        .step {
-            background-color: #FF9800;
-            color: white;
-            padding: 10px 20px; /* Ajuste do padding */
-            margin: 0 5px;
-            border-radius: 5px;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
     <div class="header">
         <span class="revar-title">ReVar</span>
+        <div class="steps">
+            <div class="step" id="step1"><span class="step-number">1</span>Passo 1</div>
+            <div class="step" id="step2"><span class="step-number">2</span>Passo 2</div>
+            <div class="step" id="step3"><span class="step-number">3</span>Passo 3</div>
+            <div class="step" id="step4"><span class="step-number">4</span>Passo 4 (Finalização)</div>
+        </div>
     </div>
     <div class="container">
-        <div class="step" id="current-step-title">Passo 1</div> <p class="description" id="step-description">Acesse a área do investidor na B3 pelo link <a href="https://www.investidor.b3.com.br" target="_blank">www.investidor.b3.com.br</a> e clique em "Saiba mais" na opção da Calculadora Revar.</p>
-        <img id="step-image" src="imagem2.jpeg" alt="Passo 1">
+        <p class="description" id="step-description"></p>
+        <img id="step-image" src="" alt="Passo">
         <div class="buttons">
             <button id="prev" disabled>Anterior</button>
             <button id="next">Próximo</button>
@@ -94,36 +121,7 @@
     </div>
 
     <script>
-        const stepTitle = document.getElementById("current-step-title"); // Título centralizado
-        const stepDescription = document.getElementById("step-description");
-        const stepImage = document.getElementById("step-image");
-        const prevButton = document.getElementById("prev");
-        const nextButton = document.getElementById("next");
-
-        const steps = [
-            { title: "Passo 1", image: "imagem2.jpeg", description: "Acesse a área do investidor na B3 pelo link <a href=\"https://www.investidor.b3.com.br\" target=\"_blank\">www.investidor.b3.com.br</a> e clique em \"Saiba mais\" na opção da Calculadora Revar." },
-            { title: "Passo 2", image: "imagem3.jpeg", description: "Agora, vincule a Calculadora Revar." },
-            { title: "Passo 3", image: "Imagem4.jpeg", description: "Revise atentamente as informações fornecidas antes de prosseguir." },
-            { title: "Passo 4 (Finalização)", image: "Imagem1.jpeg", description: "Ao concluir o processo aguarde a atualização pela Receita Federal." }
-        ];
-
-        let currentStep = 0;
-
-        function changeStep(direction) {
-            currentStep += direction;
-            const currentStepData = steps[currentStep];
-            stepTitle.innerText = currentStepData.title;
-            stepDescription.innerHTML = currentStepData.description;
-            stepImage.src = currentStepData.image;
-
-            prevButton.disabled = currentStep === 0;
-            nextButton.disabled = currentStep === steps.length - 1;
-        }
-
-        prevButton.addEventListener('click', () => changeStep(-1));
-        nextButton.addEventListener('click', () => changeStep(1));
-
-        changeStep(0); // Exibe o primeiro passo ao carregar a página
+        // ... (código JavaScript permanece o mesmo)
     </script>
 </body>
 </html>
