@@ -12,37 +12,87 @@
             padding: 0;
             background: linear-gradient(to right, #1A237E, #283593, #3949AB);
             color: white;
-            /* Define largura e altura fixas para o body */
-            width: 1200px; /* Largura desejada */
-            height: 800px; /* Altura desejada */
-            margin: 0 auto; /* Centraliza a página */
-        }
-        .header { /* ... estilos do header ... */ }
-        .revar-title { /* ... estilos do revar-title ... */ }
-        .steps { /* ... estilos dos steps ... */ }
-        .step { /* ... estilos do step ... */ }
-        .step-number { /* ... estilos do step-number ... */ }
-        .container {
-            /* Remove max-width e max-height */
-            margin: 50px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-            color: black;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        #step-image {
-            /* Remove max-width e max-height */
-            width: auto; /* Largura automática */
-            height: auto; /* Altura automática */
+
+        .header {
+            margin-top: 20px;
         }
-        .description { /* ... estilos do description ... */ }
-        .description a { /* ... estilos do description a ... */ }
-        .buttons { /* ... estilos do buttons ... */ }
-        button { /* ... estilos do button ... */ }
+
+        .revar-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .step {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .step:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .step-number {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .container {
+            max-width: 90%;
+            width: 400px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            color: black;
+            margin-top: 30px;
+        }
+
+        #step-image {
+            width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            margin-top: 10px;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            background: #3949AB;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:disabled {
+            background: gray;
+            cursor: not-allowed;
+        }
+
+        button:hover:not(:disabled) {
+            background: #1A237E;
+        }
     </style>
 </head>
 <body>
@@ -55,8 +105,9 @@
             <div class="step" id="step4"><span class="step-number">4</span>Passo 4 (Finalização)</div>
         </div>
     </div>
+
     <div class="container">
-        <p class="description" id="step-description"></p>
+        <p class="description" id="step-description">Clique em "Próximo" para iniciar.</p>
         <img id="step-image" src="" alt="Passo">
         <div class="buttons">
             <button id="prev" disabled>Anterior</button>
@@ -65,7 +116,42 @@
     </div>
 
     <script>
-        // ... (código JavaScript permanece o mesmo)
+        const steps = [
+            { description: "Passo 1: Início do processo", image: "https://via.placeholder.com/300?text=Passo+1" },
+            { description: "Passo 2: Configuração", image: "https://via.placeholder.com/300?text=Passo+2" },
+            { description: "Passo 3: Processamento", image: "https://via.placeholder.com/300?text=Passo+3" },
+            { description: "Passo 4: Finalização", image: "https://via.placeholder.com/300?text=Passo+4" }
+        ];
+
+        let currentStep = 0;
+        const stepDescription = document.getElementById("step-description");
+        const stepImage = document.getElementById("step-image");
+        const prevButton = document.getElementById("prev");
+        const nextButton = document.getElementById("next");
+
+        function updateStep() {
+            stepDescription.textContent = steps[currentStep].description;
+            stepImage.src = steps[currentStep].image;
+
+            prevButton.disabled = currentStep === 0;
+            nextButton.disabled = currentStep === steps.length - 1;
+        }
+
+        nextButton.addEventListener("click", () => {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                updateStep();
+            }
+        });
+
+        prevButton.addEventListener("click", () => {
+            if (currentStep > 0) {
+                currentStep--;
+                updateStep();
+            }
+        });
+
+        updateStep();
     </script>
 </body>
 </html>
